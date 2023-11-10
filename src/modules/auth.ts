@@ -1,4 +1,13 @@
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
+
+const comparePasswords = (password, hashed) => {
+  return bcrypt.compare(password, hashed)
+}
+
+const hashPassword = (password) => {
+  return bcrypt.hash(password, 5)
+}
 
 const createJWT = (user) => {
   const token = jwt.sign(
@@ -40,4 +49,4 @@ const protect = (req, res, next) => {
 }
 
 
-export { createJWT, protect }
+export { comparePasswords, hashPassword, createJWT, protect }
