@@ -34,6 +34,9 @@ const createNewUser = async (req, res) => {
 }
 
 const signIn = async (req, res) => {
+  console.log('username:', req.body.username)
+  console.log('password:', req.body.password)
+  
   const user = await prisma.user.findUnique({
     where: {
       username: req.body.username
@@ -45,10 +48,29 @@ const signIn = async (req, res) => {
   if (!isValid) {
     res.status(401)
     res.json({message: 'invalid username and password combination'})
+    return
   }
 
   const token = createJWT(user)
   res.json({token})
 }
 
-export { getUser, createNewUser, signIn }
+const updateFavs = async (req, res) => {
+
+  const { username } = req.user;
+  const { fourFavs } = req.body;
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { username: username },
+      data: { fourFavs },
+    });
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+export { getUser, createNewUser, signIn, updateFavs }
