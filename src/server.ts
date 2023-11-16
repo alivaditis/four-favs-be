@@ -24,5 +24,14 @@ app.post('/api/v0/signin', [body('username').isString(), body('password').isStri
 
 app.use('/api/v0/', protect, router)
 
+app.use((err, req, res, next) => {
+  if (err.type === "auth") {
+    res.status(401).json({ message: 'not authorized'})
+  } else if (err.type === "input") {
+    res.status(400).json({message: 'invalid input'})
+  } else {
+    res.status(500).json({message: 'server error'})
+  }
+})
 
 export default app
