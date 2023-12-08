@@ -24,6 +24,22 @@ const getUser = async (req, res, next) => {
   }
 }
 
+const getUsers = async (req, res, next) => {
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+      }
+    })
+    res.json({users: users})
+  } catch (e) {
+    next(e)
+  }
+}
+
+
+
 const createNewUser = async (req, res, next) => {
   try {
     const hashed = await hashPassword(req.body.password);
@@ -86,4 +102,4 @@ const updateFavs = async (req, res, next) => {
   }
 }
 
-export { getUser, createNewUser, signIn, updateFavs }
+export { getUser, createNewUser, signIn, updateFavs, getUsers }
