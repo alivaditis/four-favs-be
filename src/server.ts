@@ -4,7 +4,7 @@ import cors from 'cors'
 import { body } from 'express-validator'
 import { handleInputErrors } from './modules/middleware'
 import { protect } from './modules/auth'
-import { getUser, createNewUser, signIn, updateFavs } from './handlers/user'
+import { getUser, getUsers, createNewUser, signIn } from './handlers/user'
 
 const app = express()
 
@@ -19,6 +19,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/v0/user/:username', getUser)
+app.get('/api/v0/users', getUsers)
 app.post('/api/v0/user', [body('username').isString(), body('password').isString()], handleInputErrors, createNewUser)
 app.post('/api/v0/signin', [body('username').isString(), body('password').isString()], handleInputErrors, signIn)
 
